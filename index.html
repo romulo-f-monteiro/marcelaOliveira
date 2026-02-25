@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcela Oliveira - App Fitness</title>
+    <!-- Tailwind CSS para estilização rápida e moderna -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons para ícones bonitos -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            500: '#E11D48', // Rose 600 - Cor principal vibrante
+                            600: '#BE123C', // Rose 700 - Hover
+                        },
+                        dark: {
+                            900: '#0F172A', // Fundo principal
+                            800: '#1E293B', // Fundo secundário (cards)
+                            700: '#334155', // Bordas
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* CSS customizado para scrollbar e animações suaves */
+        body {
+            background-color: #0F172A;
+            color: #F8FAFC;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0F172A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilo simulando tela de aplicativo no desktop */
+        .app-container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background-color: #0F172A;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-500 selection:text-white">
+
+    <div class="app-container flex flex-col">
+        
+        <!-- Header -->
+        <header class="pt-10 pb-6 px-6 bg-dark-800 rounded-b-3xl shadow-lg z-10 sticky top-0">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <p class="text-sm text-slate-400 font-medium">Bem-vinda,</p>
+                    <h1 class="text-2xl font-bold tracking-tight text-white uppercase">Marcela Oliveira</h1>
+                </div>
+                <div class="w-12 h-12 rounded-full bg-brand-500 flex items-center justify-center text-xl font-bold border-2 border-dark-800 shadow-[0_0_15px_rgba(225,29,72,0.4)]">
+                    MO
+                </div>
+            </div>
+
+            <!-- Navegação Tabs -->
+            <nav class="flex space-x-2 bg-dark-900 p-1.5 rounded-2xl">
+                <button onclick="switchTab('treinos')" id="tab-treinos" class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-brand-500 text-white shadow-md">
+                    <i class="ph ph-barbell mr-1 text-lg align-middle"></i> Treinos
+                </button>
+                <button onclick="switchTab('dieta')" id="tab-dieta" class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white">
+                    <i class="ph ph-fork-knife mr-1 text-lg align-middle"></i> Dieta
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-6 relative" id="main-content">
+            <!-- O conteúdo será injetado aqui via JavaScript -->
+        </main>
+
+    </div>
+
+    <script>
+        // Dados do App
+        const dadosApp = {
+            treinos: [
+                { id: 'pernas', nome: 'Pernas & Glúteos', descricao: 'Foco em quadríceps, posterior e glúteos', icone: 'ph-person', cor: 'from-pink-500 to-rose-500' },
+                { id: 'costas', nome: 'Costas & Bíceps', descricao: 'Puxadas, remadas e roscas', icone: 'ph-person-arms-spread', cor: 'from-blue-500 to-indigo-500' },
+                { id: 'peito', nome: 'Peito, Ombro & Tríceps', descricao: 'Supinos, desenvolvimentos e extensões', icone: 'ph-barbell', cor: 'from-emerald-500 to-teal-500' },
+                { id: 'abdomen', nome: 'Abdômen Core', descricao: 'Fortalecimento da região central', icone: 'ph-activity', cor: 'from-orange-500 to-red-500' },
+                { id: 'cardio', nome: 'Cardio HIIT', descricao: 'Treino intervalado de alta intensidade', icone: 'ph-sneaker', cor: 'from-purple-500 to-fuchsia-500' }
+            ],
+            dieta: [
+                { 
+                    refeicao: 'Café da Manhã', 
+                    horario: '08:00', 
+                    icone: 'ph-coffee',
+                    itens: ['2 Ovos mexidos ou cozidos', '1 fatia de pão de forma integral', '1 xícara de café (sem açúcar) ou chá', '1/2 Mamão papaia'] 
+                },
+                { 
+                    refeicao: 'Almoço', 
+                    horario: '12:30', 
+                    icone: 'ph-bowl-food',
+                    itens: ['150g de Peito de frango grelhado', '100g de Arroz integral ou batata', 'Salada de folhas verdes à vontade', '1 colher (sopa) de azeite extra virgem'] 
+                },
+                { 
+                    refeicao: 'Lanche da Tarde', 
+                    horario: '16:00', 
+                    icone: 'ph-apple-podcasts',
+                    itens: ['1 dose (30g) de Whey Protein', '1 Iogurte natural desnatado', '30g de Aveia em flocos'] 
+                },
+                { 
+                    refeicao: 'Jantar', 
+                    horario: '20:00', 
+                    icone: 'ph-moon',
+                    itens: ['150g de Filé de peixe ou patinho moído', '100g de Brócolis ou couve-flor no vapor', 'Salada de tomate e pepino'] 
+                },
+                { 
+                    refeicao: 'Ceia', 
+                    horario: '22:30', 
+                    icone: 'ph-bed',
+                    itens: ['1 xícara de chá de camomila ou erva-doce', '15g de castanhas ou amêndoas'] 
+                }
+            ]
+        };
+
+        const mainContent = document.getElementById('main-content');
+        
+        // Estado atual
+        let abaAtual = 'treinos';
+
+        // Função para alternar abas
+        function switchTab(tab) {
+            abaAtual = tab;
+            
+            // Atualizar botões visuais
+            const btnTreinos = document.getElementById('tab-treinos');
+            const btnDieta = document.getElementById('tab-dieta');
+
+            if(tab === 'treinos') {
+                btnTreinos.className = "flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-brand-500 text-white shadow-md";
+                btnDieta.className = "flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white";
+                renderizarTreinos();
+            } else {
+                btnDieta.className = "flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-brand-500 text-white shadow-md";
+                btnTreinos.className = "flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-slate-400 hover:text-white";
+                renderizarDieta();
+            }
+        }
+
+        // Renderizar a tela principal de Treinos
+        function renderizarTreinos() {
+            let html = `
+                <div class="fade-in">
+                    <h2 class="text-4xl font-extrabold text-white leading-tight mb-8 mt-2">
+                        O que iremos <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-rose-400">treinar hoje?</span>
+                    </h2>
+                    
+                    <div class="space-y-4 pb-10">
+            `;
+
+            dadosApp.treinos.forEach(treino => {
+                html += `
+                    <button onclick="abrirTreino('${treino.id}')" class="w-full text-left bg-dark-800 hover:bg-dark-700 transition-colors border border-dark-700 rounded-2xl p-5 flex items-center group shadow-sm">
+                        <div class="w-14 h-14 rounded-xl bg-gradient-to-br ${treino.cor} flex items-center justify-center text-white text-2xl shadow-lg mr-4 group-hover:scale-105 transition-transform">
+                            <i class="ph ${treino.icone}"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-white mb-1">${treino.nome}</h3>
+                            <p class="text-sm text-slate-400 leading-snug">${treino.descricao}</p>
+                        </div>
+                        <i class="ph ph-caret-right text-slate-500 text-xl"></i>
+                    </button>
+                `;
+            });
+
+            html += `</div></div>`;
+            mainContent.innerHTML = html;
+        }
+
+        // Renderizar a tela de detalhes do Treino (Onde os vídeos ficarão no futuro)
+        function abrirTreino(idTreino) {
+            const treino = dadosApp.treinos.find(t => t.id === idTreino);
+            
+            let html = `
+                <div class="fade-in flex flex-col h-full">
+                    <button onclick="renderizarTreinos()" class="flex items-center text-slate-400 hover:text-white mb-6 w-fit transition-colors">
+                        <i class="ph ph-arrow-left text-xl mr-2"></i> Voltar aos treinos
+                    </button>
+                    
+                    <div class="bg-gradient-to-br ${treino.cor} p-6 rounded-3xl mb-8 shadow-lg">
+                        <i class="ph ${treino.icone} text-4xl text-white mb-3 opacity-90"></i>
+                        <h2 class="text-3xl font-extrabold text-white mb-1">${treino.nome}</h2>
+                        <p class="text-white/80 font-medium">${treino.descricao}</p>
+                    </div>
+
+                    <div class="flex-1 flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-dark-700 rounded-3xl bg-dark-800/50">
+                        <div class="w-16 h-16 bg-dark-700 rounded-full flex items-center justify-center text-brand-500 text-3xl mb-4">
+                            <i class="ph ph-play-circle"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">Vídeos em Breve</h3>
+                        <p class="text-slate-400 text-sm">Esta seção está sendo preparada. Em breve os vídeos com as execuções dos exercícios de <strong>${treino.nome}</strong> aparecerão aqui!</p>
+                    </div>
+                </div>
+            `;
+            
+            mainContent.innerHTML = html;
+        }
+
+        // Renderizar a tela de Dieta
+        function renderizarDieta() {
+            let html = `
+                <div class="fade-in">
+                    <div class="flex items-center justify-between mb-8 mt-2">
+                        <h2 class="text-3xl font-extrabold text-white">Plano <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Alimentar</span></h2>
+                        <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center text-2xl">
+                            <i class="ph ph-leaf"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="relative pl-4 pb-10 border-l-2 border-dark-700 space-y-8 ml-2">
+            `;
+
+            dadosApp.dieta.forEach(refeicao => {
+                let itensHtml = refeicao.itens.map(item => `<li class="flex items-start mb-2"><i class="ph ph-check-circle text-emerald-500 mr-2 mt-0.5 text-lg shrink-0"></i><span class="text-slate-300 text-sm">${item}</span></li>`).join('');
+                
+                html += `
+                    <div class="relative">
+                        <!-- Bolinha da timeline -->
+                        <div class="absolute -left-[25px] top-1 w-6 h-6 bg-dark-800 border-4 border-emerald-500 rounded-full"></div>
+                        
+                        <div class="bg-dark-800 border border-dark-700 rounded-2xl p-5 ml-4 shadow-sm">
+                            <div class="flex items-center justify-between mb-4 border-b border-dark-700 pb-3">
+                                <div class="flex items-center text-white font-bold text-lg">
+                                    <i class="ph ${refeicao.icone} text-brand-500 text-xl mr-2"></i>
+                                    ${refeicao.refeicao}
+                                </div>
+                                <span class="bg-dark-900 text-slate-300 text-xs font-bold px-3 py-1 rounded-lg flex items-center">
+                                    <i class="ph ph-clock mr-1"></i> ${refeicao.horario}
+                                </span>
+                            </div>
+                            <ul class="space-y-1">
+                                ${itensHtml}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+            
+            mainContent.innerHTML = html;
+        }
+
+        // Inicializar o app renderizando a primeira aba
+        window.onload = () => {
+            renderizarTreinos();
+        };
+
+    </script>
+</body>
+</html>
